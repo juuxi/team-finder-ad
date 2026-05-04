@@ -44,9 +44,11 @@ class UserManager(BaseUserManager):
             surname=surname,
             avatar=avatar,
             phone=phone,
+            password=password,
         )
 
-        user.is_admin = True
+        user.is_staff = True
+        user.is_superuser = True
         user.save(using=self._db)
         return user
 
@@ -104,6 +106,8 @@ class User(AbstractBaseUser, PermissionsMixin):
         default=False,
         verbose_name='Администратор'
     )
+
+    objects = UserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['name', 'surname', 'avatar', 'phone']
