@@ -29,3 +29,17 @@ def login_view(request):
                 login(request, user)
                 return redirect('/projects/list/')
     return render(request, 'users/login.html', {'form': form})
+
+
+def register_view(request):
+    form = forms.UserRegisterForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            user = form.save()
+            password = form.cleaned_data['password']
+            user.set_password(password)
+            user.save()
+            if user is not None:
+                login(request, user)
+                return redirect('/projects/list/')
+    return render(request, 'users/register.html', {'form': form})
