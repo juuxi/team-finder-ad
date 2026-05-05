@@ -9,7 +9,7 @@ from . import forms
 
 
 @require_http_methods(["GET"])
-def handle_logout(request):
+def logout_view(request):
     """
     Кастомная обработка logout-а
     """
