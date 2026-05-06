@@ -53,3 +53,16 @@ def edit_profile_view(request):
             form.save()
             return redirect('/projects/list/')
     return render(request, 'users/edit_profile.html', {'form': form})
+
+
+def change_password_view(request):
+    form = forms.UserChangePasswordForm(request.POST or None, request=request)
+    if request.method == 'POST':
+        if form.is_valid():
+            user = request.user
+            user.set_password(form.cleaned_data['new_password2'])
+            user.save()
+            if user is not None:
+                login(request, user)
+                return redirect('/projects/list/')
+    return render(request, 'users/change_password.html', {'form': form})
