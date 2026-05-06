@@ -28,6 +28,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 return redirect('/projects/list/')
+            form.add_error(None, 'Неверный имейл или пароль')
     return render(request, 'users/login.html', {'form': form})
 
 
