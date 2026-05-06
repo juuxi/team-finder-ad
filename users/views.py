@@ -47,8 +47,7 @@ def register_view(request):
 
 
 def edit_profile_view(request):
-    form = forms.UserEditProfileForm(request.POST or None,
-                                     instance=request.user)
+    form = forms.UserChangeForm(request.POST or None, instance=request.user)
     if request.method == 'POST':
         if form.is_valid():
             form.save()

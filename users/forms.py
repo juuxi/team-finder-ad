@@ -14,11 +14,11 @@ class UserCreationForm(forms.ModelForm):
         fields = ['name', 'surname', 'email']
 
 
-class UserChangeForm(forms.ModelForm):
+class AdminUserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['avatar', 'name', 'surname', 'about', 'phone', 'github_url']
+        fields = '__all__'
 
 
 class UserLoginForm(forms.Form):
@@ -34,7 +34,7 @@ class UserRegisterForm(forms.ModelForm):
         fields = ['name', 'surname', 'email']
 
 
-class UserEditProfileForm(forms.ModelForm):
+class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = User
