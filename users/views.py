@@ -3,16 +3,11 @@ from django.shortcuts import redirect
 
 from django.contrib.auth import logout, login
 from django.contrib.auth import authenticate
-from django.views.decorators.http import require_http_methods
 
 from . import forms
 
 
-@require_http_methods(["GET"])
 def logout_view(request):
-    """
-    Кастомная обработка logout-а
-    """
     logout(request)
 
     return redirect('/projects/list/')
