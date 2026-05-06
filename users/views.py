@@ -3,8 +3,13 @@ from django.shortcuts import redirect
 
 from django.contrib.auth import logout, login
 from django.contrib.auth import authenticate
+from django.contrib.auth import get_user_model
+
+from django.views.generic.detail import DetailView
 
 from . import forms
+
+User = get_user_model()
 
 
 def logout_view(request):
@@ -46,7 +51,7 @@ def edit_profile_view(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect('/projects/list/')
+            return redirect(f'/users/{request.user.id}/')
     return render(request, 'users/edit_profile.html', {'form': form})
 
 
@@ -59,5 +64,12 @@ def change_password_view(request):
             user.save()
             if user is not None:
                 login(request, user)
-                return redirect('/projects/list/')
+                return redirect(f'/users/{request.user.id}/')
     return render(request, 'users/change_password.html', {'form': form})
+
+
+class UserDetailView(DetailView):
+    model = User
+    context_object_name = 'user'
+    pk_url_kwarg = 'user_id'
+    template_name = 'users/user-details.html'
