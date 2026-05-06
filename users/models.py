@@ -74,6 +74,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     phone = models.CharField(
         max_length=12,
+        unique=True,
         verbose_name='Номер телефона'
     )
 
