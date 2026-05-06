@@ -44,3 +44,13 @@ def register_view(request):
                 login(request, user)
                 return redirect('/projects/list/')
     return render(request, 'users/register.html', {'form': form})
+
+
+def edit_profile_view(request):
+    form = forms.UserEditProfileForm(request.POST or None,
+                                     instance=request.user)
+    if request.method == 'POST':
+        if form.is_valid():
+            form.save()
+            return redirect('/projects/list/')
+    return render(request, 'users/edit_profile.html', {'form': form})
