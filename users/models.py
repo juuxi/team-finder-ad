@@ -93,7 +93,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         verbose_name='Описание'
     )
 
-    favourites = models.ManyToManyField(
+    favorites = models.ManyToManyField(
         'projects.Project',
         blank=True,
         related_name='interested_users',
