@@ -8,4 +8,5 @@ urlpatterns = [
     path('list/', views.ProjectListView.as_view(), name='list'),
     path('<int:project_id>/toggle-favorite/', views.toggle_favorite,
          name='toggle-favorite'),
+    path('favorites/', views.FavoritesListView.as_view(), name='favorites'),
 ]

@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
 
 from .models import Project
@@ -22,3 +23,11 @@ def toggle_favorite(request, project_id=None):
 
     user.favorites.add(project)
     return JsonResponse({'status': 'ok', 'favorited': True})
+
+
+class FavoritesListView(LoginRequiredMixin, ListView):
+    template_name = 'projects/favorite_projects.html'
+    context_object_name = 'projects'
+
+    def get_queryset(self):
+        return self.request.user.favorites.all()
