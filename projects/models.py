@@ -52,3 +52,6 @@ class Project(models.Model):
         related_name='participated_projects',
         verbose_name='Участники'
     )
+
+    def __str__(self):
+        return self.name
