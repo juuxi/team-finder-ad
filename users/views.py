@@ -12,7 +12,39 @@ from django_filters.views import FilterView
 from . import forms
 from .filters import UserFilter
 
+from PIL import Image, ImageDraw, ImageFont
+from django.core.files.base import ContentFile
+from io import BytesIO
+
+from random import randint
+
 User = get_user_model()
+
+
+def assign_user_avatar(user_instance):
+    # мягкие цвета, на которых виден белый
+    image = Image.new("RGB", (128, 128),
+                      (randint(150, 200),
+                       randint(150, 200),
+                       randint(150, 200)))
+    draw = ImageDraw.Draw(image)
+    font = ImageFont.load_default(size=64)
+    text = user_instance.name[0]
+    bbox = font.getbbox(text)
+    text_width = bbox[2] - bbox[0]
+    x = (128 - text_width) // 2
+    y = 32
+    draw.text((x, y), text, (255, 255, 255), font=font)
+    buffer = BytesIO()
+    image.save(buffer, format='PNG')
+
+    image_file = ContentFile(buffer.getvalue())
+
+    user_instance.avatar.save(
+        f'avatar_{user_instance.id}.png',
+        image_file,
+        save=True
+    )
 
 
 def logout_view(request):
@@ -42,6 +74,7 @@ def register_view(request):
             user = form.save()
             password = form.cleaned_data['password']
             user.set_password(password)
+            assign_user_avatar(user)
             user.save()
             if user is not None:
                 login(request, user)
