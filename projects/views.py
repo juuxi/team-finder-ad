@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,6 +6,7 @@ from django.http import JsonResponse
 from django.http import HttpResponseForbidden
 
 from .models import Project
+from .forms import ProjectForm
 
 
 class ProjectListView(ListView):
@@ -63,3 +64,21 @@ def toggle_participate(request, project_id=None):
 
     project.participants.add(user)
     return JsonResponse({'status': 'ok', 'participant': True})
+
+
+@login_required
+def create_update_project(request, project_id=None):
+    instance = None
+    is_edit = False
+    if project_id:
+        instance = get_object_or_404(Project, pk=project_id)
+        is_edit = True
+    form = ProjectForm(request.POST or None, instance=instance)
+    if form.is_valid():
+        project = form.save(commit=False)
+        project.owner = request.user
+        project.save()
+        project.participants.add(request.user)
+        return redirect('projects:project-details', project_id=project.id)
+    context = {'form': form, 'is_edit': is_edit}
+    return render(request, 'projects/create-project.html', context)
