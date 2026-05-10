@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import ListView, DetailView
+from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import JsonResponse
@@ -16,6 +17,7 @@ class ProjectListView(ListView):
     context_object_name = 'projects'
 
 
+@require_http_methods(["POST"])
 @login_required
 def toggle_favorite(request, project_id=None):
     user = request.user
@@ -43,6 +45,7 @@ class ProjectDetailView(DetailView):
     template_name = 'projects/project-details.html'
 
 
+@require_http_methods(["POST"])
 @login_required
 def complete_project(request, project_id=None):
     user = request.user
@@ -56,6 +59,7 @@ def complete_project(request, project_id=None):
     return HttpResponseForbidden()
 
 
+@require_http_methods(["POST"])
 @login_required
 def toggle_participate(request, project_id=None):
     user = request.user
