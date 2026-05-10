@@ -13,6 +13,8 @@ class ProjectForm(forms.ModelForm):
 
     def clean_github_url(self):
         github_url = self.cleaned_data['github_url']
+        if not github_url:
+            return None
         github_url = github_url.lower()
         website_part = github_url.split('://', 1)[-1]
         if not website_part.startswith('github.com'):
