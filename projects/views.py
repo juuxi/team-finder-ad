@@ -15,6 +15,7 @@ class ProjectListView(ListView):
     ordering = ('-created_at')
     template_name = 'projects/project_list.html'
     context_object_name = 'projects'
+    paginate_by = 12
 
 
 @require_http_methods(["POST"])

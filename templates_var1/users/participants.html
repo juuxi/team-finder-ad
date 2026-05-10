@@ -6,6 +6,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/project_list.css' %}">
 <link rel="stylesheet" href="{% static 'css/participants.css' %}">
+<link rel="stylesheet" href="{% static 'css/paginator.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -71,4 +72,5 @@
     {% include 'includes/empty-project-card.html' with empty_title="Пока нет участников" empty_message="Попробуйте сбросить фильтр" button_link="/users/list" button_text="Сбросить" %}
     {% endif %}
 </div>
+{% include "includes/paginator.html" %}
 {% endblock %}

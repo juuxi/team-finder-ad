@@ -5,6 +5,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/project_list.css' %}">
+<link rel="stylesheet" href="{% static 'css/paginator.css' %}">
 {% endblock %}
 
 {% with page_id="projects-list" %}
@@ -28,5 +29,6 @@
     {% include 'includes/project-fav-toggle.js' %}
 </div>
 
+{% include "includes/paginator.html" %}
 {% endblock %}
 {% endwith %}
