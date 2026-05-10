@@ -126,3 +126,12 @@ class UserListFilterView(FilterView):
         context['active_filter'] = filter_param
 
         return context
+
+    # игнорирование параметра фильтрации для
+    # неаутентифицированных пользователей
+    def get_filterset_kwargs(self, filterset_class):
+        kwargs = super().get_filterset_kwargs(filterset_class)
+
+        if not self.request.user.is_authenticated:
+            kwargs['data'] = None
+        return kwargs
