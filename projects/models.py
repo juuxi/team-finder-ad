@@ -43,6 +43,7 @@ class Project(models.Model):
     status = models.CharField(
         max_length=6,
         choices=STATUS_OPTIONS,
+        default='open',
         verbose_name='Статус'
     )
 
