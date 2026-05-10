@@ -4,6 +4,7 @@ from django.shortcuts import redirect
 from django.contrib.auth import logout, login
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
+from django.contrib.auth.decorators import login_required
 
 from django.views.generic.detail import DetailView
 
@@ -47,6 +48,7 @@ def assign_user_avatar(user_instance):
     )
 
 
+@login_required
 def logout_view(request):
     logout(request)
 
@@ -82,6 +84,7 @@ def register_view(request):
     return render(request, 'users/register.html', {'form': form})
 
 
+@login_required
 def edit_profile_view(request):
     form = forms.UserChangeForm(request.POST or None, instance=request.user)
     if request.method == 'POST':
@@ -91,6 +94,7 @@ def edit_profile_view(request):
     return render(request, 'users/edit_profile.html', {'form': form})
 
 
+@login_required
 def change_password_view(request):
     form = forms.UserChangePasswordForm(request.POST or None, request=request)
     if request.method == 'POST':
