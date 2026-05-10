@@ -50,6 +50,10 @@ class UserChangeForm(forms.ModelForm):
         if phone.startswith('8'):
             phone = phone.replace('8', '+7', 1)
 
+        if len(phone) != 12:
+            raise ValidationError('Формат номера телефона - 8XXXXXXXXXX  или \
+                                  +7XXXXXXXXXX')
+
         if ((not phone == self.instance.phone)
            and (User.objects.filter(phone=phone).exists())):
             raise ValidationError('Пользователем с таким номером \
