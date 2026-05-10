@@ -56,7 +56,7 @@ class UserChangeForm(forms.ModelForm):
 
         if ((not phone == self.instance.phone)
            and (User.objects.filter(phone=phone).exists())):
-            raise ValidationError('Пользователем с таким номером \
+            raise ValidationError('Пользователь с таким номером \
             телефона уже существует')
 
         return phone
