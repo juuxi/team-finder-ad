@@ -4,13 +4,6 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
 
 class UserManager(BaseUserManager):
-    def normalize_phone(self, phone):
-        """
-        Нормализация номера телефона, перевод в формат +7XXXXXXXXXX
-        """
-        if phone[0] == 8:
-            phone = '+7' + phone[1:]
-        return phone
 
     def create_user(self, email, name, surname, avatar, phone, password=None):
         """
@@ -25,7 +18,7 @@ class UserManager(BaseUserManager):
             name=name,
             surname=surname,
             avatar=avatar,
-            phone=self.normalize_phone(phone),
+            phone=phone,
         )
 
         user.set_password(password)
