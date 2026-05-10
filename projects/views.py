@@ -47,10 +47,12 @@ class ProjectDetailView(DetailView):
 def complete_project(request, project_id=None):
     user = request.user
     project = get_object_or_404(Project, pk=project_id)
-    if project.owner == user and project.status == 'open':
-        project.status = 'closed'
-        project.save()
-        return JsonResponse({'status': 'ok', 'project_status': 'closed'})
+    if project.owner == user:
+        if project.status == 'open':
+            project.status = 'closed'
+            project.save()
+            return JsonResponse({'status': 'ok', 'project_status': 'closed'})
+        return JsonResponse({'status': 'error', 'project_status': 'closed'})
     return HttpResponseForbidden()
 
 
