@@ -8,7 +8,13 @@ from io import BytesIO
 from random import randint
 
 
-from .constants import IMAGE_SIZE, MIN_BRIGHTNESS, MAX_BRIGHTNESS, AVATAR_LETTER_COLOR
+from .constants import (
+    IMAGE_SIZE,
+    MIN_BRIGHTNESS,
+    MAX_BRIGHTNESS,
+    AVATAR_LETTER_COLOR,
+    USER_PHONE_MAX_LENGTH,
+)
 
 User = get_user_model()
 
@@ -20,7 +26,7 @@ def handle_clean_phone(phone, instance):
     if phone.startswith('8'):
         phone = phone.replace('8', '+7', 1)
 
-    if len(phone) != 12:
+    if len(phone) != USER_PHONE_MAX_LENGTH:
         raise ValidationError('Формат номера телефона - 8XXXXXXXXXX  или \
                                 +7XXXXXXXXXX')
 
