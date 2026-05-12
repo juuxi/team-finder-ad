@@ -1,8 +1,7 @@
 from django import forms
 
-from django.core.exceptions import ValidationError
-
 from .models import Project
+from .utils import handle_clean_github_url
 
 
 class ProjectForm(forms.ModelForm):
@@ -13,11 +12,4 @@ class ProjectForm(forms.ModelForm):
 
     def clean_github_url(self):
         github_url = self.cleaned_data['github_url']
-        if not github_url:
-            return None
-        github_url = github_url.lower()
-        website_part = github_url.split('://', 1)[-1]
-        if not website_part.startswith('github.com'):
-            raise ValidationError('Ссылка должна вести на github')
-
-        return github_url
+        return handle_clean_github_url(github_url)
