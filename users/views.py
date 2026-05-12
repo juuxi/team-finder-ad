@@ -16,7 +16,7 @@ User = get_user_model()
 def logout_view(request):
     logout(request)
 
-    return redirect('/projects/list/')
+    return redirect('projects:list')
 
 
 def login_view(request):
@@ -28,7 +28,7 @@ def login_view(request):
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
-                return redirect('/projects/list/')
+                return redirect('projects:list')
             form.add_error(None, 'Неверный имейл или пароль')
     return render(request, 'users/login.html', {'form': form})
 
@@ -44,7 +44,7 @@ def register_view(request):
             user.save()
             if user is not None:
                 login(request, user)
-                return redirect('/projects/list/')
+                return redirect('projects:list')
     return render(request, 'users/register.html', {'form': form})
 
 
@@ -54,7 +54,7 @@ def edit_profile_view(request):
     if request.method == 'POST':
         if form.is_valid():
             form.save()
-            return redirect(f'/users/{request.user.id}/')
+            return redirect('users:user-details', user_id=request.user.id)
     return render(request, 'users/edit_profile.html', {'form': form})
 
 
@@ -68,7 +68,7 @@ def change_password_view(request):
             user.save()
             if user is not None:
                 login(request, user)
-                return redirect(f'/users/{request.user.id}/')
+                return redirect('users:user-details', user_id=request.user.id)
     return render(request, 'users/change_password.html', {'form': form})
 
 
