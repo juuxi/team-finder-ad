@@ -6,6 +6,13 @@ from django_filters.views import FilterView
 
 from . import forms
 from .filters import UserFilter
+from .constants import (
+    IMAGE_SIZE,
+    MIN_BRIGHTNESS,
+    MAX_BRIGHTNESS,
+    AVATAR_LETTER_COLOR,
+    PAGINATE_BY,
+)
 
 from PIL import Image, ImageDraw, ImageFont
 from django.core.files.base import ContentFile
@@ -19,16 +26,22 @@ User = get_user_model()
 def assign_user_avatar(user_instance):
     # мягкие цвета, на которых виден белый
     image = Image.new(
-        "RGB", (128, 128), (randint(150, 200), randint(150, 200), randint(150, 200))
+        "RGB",
+        IMAGE_SIZE,
+        (
+            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
+            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
+            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
+        ),
     )
     draw = ImageDraw.Draw(image)
     font = ImageFont.load_default(size=64)
     text = user_instance.name[0]
     bbox = font.getbbox(text)
     text_width = bbox[2] - bbox[0]
-    x = (128 - text_width) // 2
-    y = 32
-    draw.text((x, y), text, (255, 255, 255), font=font)
+    x = (IMAGE_SIZE[0] - text_width) // 2
+    y = IMAGE_SIZE[1] // 4
+    draw.text((x, y), text, AVATAR_LETTER_COLOR, font=font)
     buffer = BytesIO()
     image.save(buffer, format='PNG')
 
@@ -110,7 +123,7 @@ class UserListFilterView(FilterView):
     context_object_name = 'participants'
     template_name = 'users/participants.html'
     ordering = 'id'
-    paginate_by = 12
+    paginate_by = PAGINATE_BY
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

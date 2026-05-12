@@ -2,6 +2,13 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 
+from .constants import (
+    USER_NAME_MAX_LENGTH,
+    USER_SURNAME_MAX_LENGTH,
+    USER_PHONE_MAX_LENGTH,
+    USER_ABOUT_MAX_LENGTH,
+)
+
 
 class UserManager(BaseUserManager):
 
@@ -50,18 +57,22 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
 
-    name = models.CharField(max_length=124, verbose_name='Имя')
+    name = models.CharField(max_length=USER_NAME_MAX_LENGTH, verbose_name='Имя')
 
-    surname = models.CharField(max_length=124, verbose_name='Фамилия')
+    surname = models.CharField(
+        max_length=USER_SURNAME_MAX_LENGTH, verbose_name='Фамилия'
+    )
 
     avatar = models.ImageField(upload_to='avatars/', verbose_name='Аватарка')
 
-    phone = models.CharField(max_length=12, verbose_name='Номер телефона')
+    phone = models.CharField(
+        max_length=USER_PHONE_MAX_LENGTH, verbose_name='Номер телефона'
+    )
 
     github_url = models.URLField(null=True, blank=True, verbose_name='Ссылка на github')
 
     about = models.TextField(
-        max_length=256, null=True, blank=True, verbose_name='Описание'
+        max_length=USER_ABOUT_MAX_LENGTH, null=True, blank=True, verbose_name='Описание'
     )
 
     favorites = models.ManyToManyField(
