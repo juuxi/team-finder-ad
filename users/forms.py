@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 
+from .utils import handle_clean_phone, handle_clean_github_url
+
 User = get_user_model()
 
 
@@ -41,34 +43,11 @@ class UserChangeForm(forms.ModelForm):
 
     def clean_phone(self):
         phone = self.cleaned_data['phone']
-        if (not phone.startswith('8')) and (not phone.startswith('+7')):
-            raise ValidationError('Формат номера телефона - 8XXXXXXXXXX  или \
-                                  +7XXXXXXXXXX')
-        if phone.startswith('8'):
-            phone = phone.replace('8', '+7', 1)
-
-        if len(phone) != 12:
-            raise ValidationError('Формат номера телефона - 8XXXXXXXXXX  или \
-                                  +7XXXXXXXXXX')
-
-        if (not phone == self.instance.phone) and (
-            User.objects.filter(phone=phone).exists()
-        ):
-            raise ValidationError('Пользователь с таким номером \
-            телефона уже существует')
-
-        return phone
+        return handle_clean_phone(phone, self.instance)
 
     def clean_github_url(self):
         github_url = self.cleaned_data['github_url']
-        if not github_url:
-            return None
-        github_url = github_url.lower()
-        website_part = github_url.split('://', 1)[-1]
-        if not website_part.startswith('github.com'):
-            raise ValidationError('Ссылка должна вести на github')
-
-        return github_url
+        return handle_clean_github_url(github_url)
 
 
 class UserChangePasswordForm(forms.ModelForm):

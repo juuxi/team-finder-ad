@@ -6,48 +6,10 @@ from django_filters.views import FilterView
 
 from . import forms
 from .filters import UserFilter
-from .constants import (
-    IMAGE_SIZE,
-    MIN_BRIGHTNESS,
-    MAX_BRIGHTNESS,
-    AVATAR_LETTER_COLOR,
-    PAGINATE_BY,
-)
-
-from PIL import Image, ImageDraw, ImageFont
-from django.core.files.base import ContentFile
-from io import BytesIO
-
-from random import randint
+from .constants import PAGINATE_BY
+from .utils import assign_user_avatar
 
 User = get_user_model()
-
-
-def assign_user_avatar(user_instance):
-    # мягкие цвета, на которых виден белый
-    image = Image.new(
-        "RGB",
-        IMAGE_SIZE,
-        (
-            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
-            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
-            randint(MIN_BRIGHTNESS, MAX_BRIGHTNESS),
-        ),
-    )
-    draw = ImageDraw.Draw(image)
-    font = ImageFont.load_default(size=64)
-    text = user_instance.name[0]
-    bbox = font.getbbox(text)
-    text_width = bbox[2] - bbox[0]
-    x = (IMAGE_SIZE[0] - text_width) // 2
-    y = IMAGE_SIZE[1] // 4
-    draw.text((x, y), text, AVATAR_LETTER_COLOR, font=font)
-    buffer = BytesIO()
-    image.save(buffer, format='PNG')
-
-    image_file = ContentFile(buffer.getvalue())
-
-    user_instance.avatar.save(f'avatar_{user_instance.id}.png', image_file, save=True)
 
 
 @login_required
