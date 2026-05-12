@@ -8,6 +8,7 @@ from django.http import HttpResponseForbidden
 
 from .models import Project
 from .forms import ProjectForm
+from .constants import PAGINATE_BY, OPEN_STATUS_VALUE, CLOSED_STATUS_VALUE
 
 
 class ProjectListView(ListView):
@@ -15,7 +16,7 @@ class ProjectListView(ListView):
     ordering = '-created_at'
     template_name = 'projects/project_list.html'
     context_object_name = 'projects'
-    paginate_by = 12
+    paginate_by = PAGINATE_BY
 
 
 @require_http_methods(["POST"])
@@ -52,11 +53,11 @@ def complete_project(request, project_id=None):
     user = request.user
     project = get_object_or_404(Project, pk=project_id)
     if project.owner == user:
-        if project.status == 'open':
-            project.status = 'closed'
+        if project.status == OPEN_STATUS_VALUE:
+            project.status = CLOSED_STATUS_VALUE
             project.save()
-            return JsonResponse({'status': 'ok', 'project_status': 'closed'})
-        return JsonResponse({'status': 'error', 'project_status': 'closed'})
+            return JsonResponse({'status': 'ok', 'project_status': CLOSED_STATUS_VALUE})
+        return JsonResponse({'status': 'error', 'project_status': CLOSED_STATUS_VALUE})
     return HttpResponseForbidden()
 
 
