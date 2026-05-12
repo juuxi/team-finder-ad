@@ -24,7 +24,7 @@ class ProjectListView(ListView):
 def toggle_favorite(request, project_id=None):
     user = request.user
     project = get_object_or_404(Project, pk=project_id)
-    if project in user.favorites.all():
+    if user.favorites.filter(id=project.id).exists():
         user.favorites.remove(project)
         return JsonResponse({'status': 'ok', 'favorited': False})
 
@@ -66,7 +66,7 @@ def complete_project(request, project_id=None):
 def toggle_participate(request, project_id=None):
     user = request.user
     project = get_object_or_404(Project, pk=project_id)
-    if user in project.participants.all():
+    if project.participants.filter(id=user.id).exists():
         project.participants.remove(user)
         return JsonResponse({'status': 'ok', 'participant': False})
 
