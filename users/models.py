@@ -25,8 +25,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, name,
-                         surname, avatar, phone, password=None):
+    def create_superuser(self, email, name, surname, avatar, phone, password=None):
         """
         Создание суперпользователя по переданным email, имени, фамилии, аватару
         и номеру телефона
@@ -51,55 +50,30 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True,
     )
 
-    name = models.CharField(
-        max_length=124,
-        verbose_name='Имя'
-    )
+    name = models.CharField(max_length=124, verbose_name='Имя')
 
-    surname = models.CharField(
-        max_length=124,
-        verbose_name='Фамилия'
-    )
+    surname = models.CharField(max_length=124, verbose_name='Фамилия')
 
-    avatar = models.ImageField(
-        upload_to='avatars/',
-        verbose_name='Аватарка'
-    )
+    avatar = models.ImageField(upload_to='avatars/', verbose_name='Аватарка')
 
-    phone = models.CharField(
-        max_length=12,
-        verbose_name='Номер телефона'
-    )
+    phone = models.CharField(max_length=12, verbose_name='Номер телефона')
 
-    github_url = models.URLField(
-        null=True,
-        blank=True,
-        verbose_name='Ссылка на github'
-    )
+    github_url = models.URLField(null=True, blank=True, verbose_name='Ссылка на github')
 
     about = models.TextField(
-        max_length=256,
-        null=True,
-        blank=True,
-        verbose_name='Описание'
+        max_length=256, null=True, blank=True, verbose_name='Описание'
     )
 
     favorites = models.ManyToManyField(
         'projects.Project',
         blank=True,
         related_name='interested_users',
-        verbose_name='Избранные проекты'
+        verbose_name='Избранные проекты',
     )
 
-    is_active = models.BooleanField(
-        default=True,
-        verbose_name='Активен'
-    )
+    is_active = models.BooleanField(default=True, verbose_name='Активен')
 
-    is_staff = models.BooleanField(
-        default=False,
-        verbose_name='Администратор'
-    )
+    is_staff = models.BooleanField(default=False, verbose_name='Администратор')
 
     objects = UserManager()
 

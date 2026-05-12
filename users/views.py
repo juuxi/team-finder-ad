@@ -24,10 +24,9 @@ User = get_user_model()
 
 def assign_user_avatar(user_instance):
     # мягкие цвета, на которых виден белый
-    image = Image.new("RGB", (128, 128),
-                      (randint(150, 200),
-                       randint(150, 200),
-                       randint(150, 200)))
+    image = Image.new(
+        "RGB", (128, 128), (randint(150, 200), randint(150, 200), randint(150, 200))
+    )
     draw = ImageDraw.Draw(image)
     font = ImageFont.load_default(size=64)
     text = user_instance.name[0]
@@ -41,11 +40,7 @@ def assign_user_avatar(user_instance):
 
     image_file = ContentFile(buffer.getvalue())
 
-    user_instance.avatar.save(
-        f'avatar_{user_instance.id}.png',
-        image_file,
-        save=True
-    )
+    user_instance.avatar.save(f'avatar_{user_instance.id}.png', image_file, save=True)
 
 
 @login_required
@@ -120,7 +115,7 @@ class UserListFilterView(FilterView):
     filterset_class = UserFilter
     context_object_name = 'participants'
     template_name = 'users/participants.html'
-    ordering = ('id')
+    ordering = 'id'
     paginate_by = 12
 
     def get_context_data(self, **kwargs):

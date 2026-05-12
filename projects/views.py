@@ -12,7 +12,7 @@ from .forms import ProjectForm
 
 class ProjectListView(ListView):
     model = Project
-    ordering = ('-created_at')
+    ordering = '-created_at'
     template_name = 'projects/project_list.html'
     context_object_name = 'projects'
     paginate_by = 12

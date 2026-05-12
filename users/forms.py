@@ -5,7 +5,6 @@ from django.contrib.auth.hashers import check_password
 
 from django.core.exceptions import ValidationError
 
-
 User = get_user_model()
 
 
@@ -54,8 +53,9 @@ class UserChangeForm(forms.ModelForm):
             raise ValidationError('Формат номера телефона - 8XXXXXXXXXX  или \
                                   +7XXXXXXXXXX')
 
-        if ((not phone == self.instance.phone)
-           and (User.objects.filter(phone=phone).exists())):
+        if (not phone == self.instance.phone) and (
+            User.objects.filter(phone=phone).exists()
+        ):
             raise ValidationError('Пользователь с таким номером \
             телефона уже существует')
 
