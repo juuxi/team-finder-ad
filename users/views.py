@@ -1,13 +1,7 @@
-from django.shortcuts import render
-from django.shortcuts import redirect
-
-from django.contrib.auth import logout, login
-from django.contrib.auth import authenticate
-from django.contrib.auth import get_user_model
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout, login, authenticate, get_user_model
 from django.contrib.auth.decorators import login_required
-
 from django.views.generic.detail import DetailView
-
 from django_filters.views import FilterView
 
 from . import forms
